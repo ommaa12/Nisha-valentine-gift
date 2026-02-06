@@ -6,7 +6,7 @@
     <title>Be My Valentine?</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* === ORIGINAL STYLES === */
+        /* === STYLES === */
         * { box-sizing: border-box; }
         
         body {
@@ -141,9 +141,62 @@
             background: #fffaf0; padding: 35px; border-radius: 5px;
             box-shadow: 0 0 20px rgba(0,0,0,0.2), inset 0 0 50px rgba(233, 30, 99, 0.1);
             max-width: 450px; width: 90%; position: relative; border: 2px solid #e91e63;
+            max-height: 70vh; 
+            overflow-y: auto;
         }
         .shayari-box { margin-top: 20px; padding: 15px; border-top: 1px solid #f8bbd0; font-style: italic; color: #ad1457; font-weight: 500; line-height: 1.8; }
+        
+        /* New Audio Styles */
+        .audio-container {
+            margin-top: 25px; padding: 15px; background: #fff0f3; 
+            border-radius: 15px; text-align: center; border: 1px dashed #e91e63;
+        }
+        .audio-player { width: 100%; margin-top: 10px; border-radius: 20px; outline: none; }
+
         .close-btn { margin-top: 20px; padding: 10px 25px; background: #333; color: white; border-radius: 50px; border: none; cursor: pointer; }
+
+        /* === FINAL CHALLENGE STYLES === */
+        .challenge-box {
+            background: white; padding: 25px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); width: 90%; max-width: 350px; text-align: center;
+            max-height: 80vh; overflow-y: auto;
+        }
+        .pass-input {
+            width: 100%; padding: 12px; border: 2px solid #ff80ab; border-radius: 10px;
+            font-size: 1.1rem; outline: none; margin-bottom: 15px; text-align: center; color: #e91e63;
+        }
+        .pass-input:focus { border-color: #ad1457; background: #fff0f3; }
+        
+        /* Visual Puzzle Grid */
+        .puzzle-grid {
+            display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px auto;
+        }
+        .puzzle-item {
+            font-size: 2rem; cursor: pointer; transition: transform 0.2s; user-select: none;
+        }
+        .puzzle-item:hover { transform: scale(1.2); }
+        .shake { animation: shake 0.5s; }
+        @keyframes shake {
+            0% { transform: translateX(0); } 25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } 100% { transform: translateX(0); }
+        }
+        
+        /* Math List */
+        .math-steps {
+            text-align: left; font-size: 0.85rem; color: #555; margin-bottom: 15px; padding-left: 20px;
+        }
+        .math-steps li { margin-bottom: 5px; }
+
+        /* === NEW LOCK STYLES === */
+        .lock-container {
+            text-align: center; animation: fadeIn 1.5s;
+        }
+        #lock-icon {
+            font-size: 80px; cursor: pointer; transition: transform 0.3s; display: block; margin: 20px auto;
+        }
+        #lock-icon:active { transform: scale(0.9); }
+        .lock-msg { font-family: 'Pacifico'; color: #ad1457; font-size: 1.5rem; margin-top: 15px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -167,7 +220,7 @@
 
     <div class="card hidden" id="main-card">
         <div id="question-screen">
-            <h1 style="font-family:'Pacifico'; color:#e91e63;">Will you be my valentine? 💘</h1>
+            <h1 style="font-family:'Pacifico'; color:#e91e63;">Will you be my valentine..Nisha Ji? 💘</h1>
             <div style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
                 <button style="background:linear-gradient(45deg, #ff4081, #f50057); color:white; border:none; padding:12px; border-radius:50px; font-weight:600; cursor:pointer;" onclick="showResult()">YES! 💘</button>
                 <button id="noBtn" style="background:#e0e0e0; color:#757575; border:none; padding:10px; border-radius:50px; cursor:pointer;" onmouseover="moveButton()" onclick="moveButton()">NO</button>
@@ -175,7 +228,7 @@
         </div>
 
         <div id="result-screen" class="hidden">
-            <h1 style="font-family:'Pacifico'; color:#e91e63;">I knew it! 🎉</h1>
+            <h1 style="font-family:'Pacifico'; color:#e91e63; font-size: 1.6rem; line-height: 1.4;">Congratulations! <br> You are Om's Valentine 💑</h1>
             <img src="crazy-dance-dance.gif" style="width:100%; border-radius:15px; max-height:150px; object-fit:cover;">
             <div id="timer-box">
                 <div style="font-size:0.8rem;">Time since 11/07/2024:</div>
@@ -183,7 +236,7 @@
             </div>
             <button class="gift-btn" onclick="startGiftQuiz()">🎁 Gift_1</button>
             <button class="gift-btn" onclick="openGift2()">💌 Gift_2</button>
-            <button class="gift-btn" onclick="openVideo()">🎬 Finally</button>
+            <button class="gift-btn" onclick="startFinalChallenge()">🎬 Finally</button>
         </div>
     </div>
 
@@ -205,16 +258,78 @@
                 Zindagi toh chal hi rahi thi magar,<br>
                 Jeene ka asli maza ab tum ho.”
             </div>
-            <p style="font-family:'Pacifico'; color:#e91e63;">Always yours, Mr kumar ❤️</p>
+            
+            <div class="audio-container">
+                <p style="color:#e91e63; font-weight:bold; margin:0 0 5px 0;">🎤 Listen to my voice note:</p>
+                <audio id="voice-note" controls class="audio-player">
+                    <source src="voice-note.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+
+            <p style="font-family:'Pacifico'; color:#e91e63; text-align:right; margin-top:15px;">Always yours, Mr kumar ❤️</p>
         </div>
         <button class="close-btn" onclick="closeOverlays()">Close with Love</button>
+    </div>
+
+    <div id="challenge-overlay" class="gift-overlay">
+        
+        <div id="challenge-step-1" class="challenge-box">
+            <h2 style="font-family:'Pacifico'; color:#e91e63;">One Small Question... 🔒</h2>
+            <p style="color:#666; margin-bottom:15px;">What do I call you with love?</p>
+            <input type="password" id="love-pass" class="pass-input" placeholder="Type here...">
+            <button class="gift-btn" onclick="checkPass()">Unlock</button>
+            <p id="pass-error" style="color:red; font-size:0.8rem; display:none; margin-top:5px;">Wrong answer, my love! 😜</p>
+        </div>
+
+        <div id="challenge-step-2" class="challenge-box hidden">
+            <h2 style="font-family:'Pacifico'; color:#e91e63;">Find the Rose! 🌹</h2>
+            <p style="color:#666; font-size:0.9rem;">There is only <b>ONE Rose</b> hidden in this garden of Tulips. Find it to move next!</p>
+            <div class="puzzle-grid" id="puzzle-grid">
+                </div>
+        </div>
+
+        <div id="challenge-step-3" class="challenge-box hidden">
+            <h2 style="font-family:'Pacifico'; color:#e91e63;">The Compatibility Calc! 🧮</h2>
+            <p style="color:#666; font-size:0.9rem;">Follow these steps in your head or calculator:</p>
+            <ul class="math-steps">
+                <li>1. Pick ANY whole number (e.g., 5).</li>
+                <li>2. Add the letters in "Affection" (<b>9</b>).</li>
+                <li>3. Multiply the total by <b>2</b>.</li>
+                <li>4. Add <b>182</b> (My love for you!).</li>
+                <li>5. Divide the total by <b>2</b>.</li>
+                <li>6. Subtract your <b>original number</b>.</li>
+            </ul>
+            <p style="color:#e91e63; font-weight:bold;">What is our Compatibility %?</p>
+            <input type="number" id="math-ans" class="pass-input" placeholder="Enter the final number...">
+            <button class="gift-btn" onclick="checkMathPuzzle()">Reveal Compatibility</button>
+            <p id="math-error" style="color:red; font-size:0.8rem; display:none; margin-top:5px;">Check your calculation again, baby! 🤓</p>
+        </div>
+
+        <button class="close-btn" onclick="closeOverlays()">Cancel</button>
     </div>
 
     <div id="video-overlay" class="gift-overlay">
         <video id="pVideo" style="width:100%; max-width:400px; border-radius:15px;" controls>
             <source src="personal-video.mp4" type="video/mp4">
         </video>
+        <p id="video-hint" style="margin-top:10px; color:#ad1457; font-size:0.8rem;">Watch till the end for a final surprise...</p>
         <button class="close-btn" onclick="closeOverlays()">Go Back</button>
+    </div>
+
+    <div id="lock-overlay" class="gift-overlay">
+        <div class="letter-paper lock-container">
+            <h2 style="font-family:'Pacifico'; color:#e91e63;">Lock Our Love Forever</h2>
+            <p style="font-size:0.9rem; color:#666;">This lock represents our journey since 2024. Tap it to seal our bond for eternity.</p>
+            <div id="lock-icon" onclick="toggleLock()">🔓</div>
+            <div id="lock-status" class="lock-msg">It's currently open...</div>
+            <div id="final-blessing" class="hidden">
+                <hr style="border:0; border-top:1px solid #f8bbd0; margin:20px 0;">
+                <p style="font-weight:bold; color:#e91e63;">Memory Sealed: 11/07/2024 — ∞</p>
+                <p style="font-size:0.8rem; color:#555;">I love you, Nishu. Forever and always. ❤️</p>
+            </div>
+        </div>
+        <button class="close-btn" onclick="closeOverlays()">End Journey</button>
     </div>
 
     <script>
@@ -285,10 +400,50 @@
         function closeOverlays() {
             document.querySelectorAll('.gift-overlay').forEach(el => el.style.display = 'none');
             document.getElementById('pVideo').pause();
+            
+            // Stop voice note if playing
+            const voiceNote = document.getElementById('voice-note');
+            if(voiceNote) {
+                voiceNote.pause();
+                voiceNote.currentTime = 0; // Reset voice note
+            }
+
             document.getElementById("bg-music").play();
+            
+            // Reset Challenge
+            document.getElementById('challenge-step-1').classList.remove('hidden');
+            document.getElementById('challenge-step-2').classList.add('hidden');
+            document.getElementById('challenge-step-3').classList.add('hidden');
+            document.getElementById('love-pass').value = '';
+            document.getElementById('math-ans').value = '';
+            document.getElementById('pass-error').style.display = 'none';
+            document.getElementById('math-error').style.display = 'none';
         }
 
-        // QUIZ LOGIC
+        // === VOICE NOTE LOGIC ===
+        // This ensures the background music pauses when voice note plays
+        const vn = document.getElementById('voice-note');
+        const bg = document.getElementById('bg-music');
+
+        vn.onplay = function() {
+            bg.pause();
+        };
+
+        vn.onpause = function() {
+            // Only resume music if the overlay is still open (otherwise closeOverlays handles it)
+            if(document.getElementById('letter-overlay').style.display === 'flex') {
+                bg.play();
+            }
+        };
+
+        vn.onended = function() {
+            if(document.getElementById('letter-overlay').style.display === 'flex') {
+                bg.play();
+            }
+        };
+
+
+        // === QUIZ LOGIC ===
         let step = 0;
         const quizData = [
             { q: "Where do I plan to spend the rest of my life?", o: ["Goa", "Giridih", "Your heart"], a: "Your heart" },
@@ -314,10 +469,9 @@
                     if(o === q.a) {
                         step++;
                         if(step < quizData.length) {
-                            // Celebrate question progress
                             const box = document.querySelector('.quiz-container-box');
                             box.style.animation = 'none';
-                            box.offsetHeight; /* trigger reflow */
+                            box.offsetHeight; 
                             box.style.animation = 'bounceIn 0.5s ease-out';
                             showQuest();
                         } else {
@@ -332,10 +486,100 @@
             });
         }
 
-        function openVideo() {
+        // === FINAL CHALLENGE LOGIC ===
+        function startFinalChallenge() {
+            document.getElementById('challenge-overlay').style.display = 'flex';
+        }
+
+        function checkPass() {
+            const val = document.getElementById('love-pass').value;
+            if(val.toLowerCase().trim() === "natuli") {
+                document.getElementById('challenge-step-1').classList.add('hidden');
+                document.getElementById('challenge-step-2').classList.remove('hidden');
+                generateVisualPuzzle();
+            } else {
+                const box = document.getElementById('challenge-step-1');
+                box.classList.add('shake');
+                document.getElementById('pass-error').style.display = 'block';
+                setTimeout(() => box.classList.remove('shake'), 500);
+            }
+        }
+
+        function generateVisualPuzzle() {
+            const grid = document.getElementById('puzzle-grid');
+            grid.innerHTML = "";
+            const totalItems = 25;
+            const correctIndex = Math.floor(Math.random() * totalItems);
+            for(let i=0; i<totalItems; i++) {
+                const span = document.createElement('div');
+                span.className = 'puzzle-item';
+                if(i === correctIndex) {
+                    span.innerText = "🌹";
+                    span.onclick = () => { showMathPuzzle(); };
+                } else {
+                    span.innerText = "🌷";
+                    span.onclick = () => {
+                        span.classList.add('shake');
+                        setTimeout(() => span.classList.remove('shake'), 500);
+                    };
+                }
+                grid.appendChild(span);
+            }
+        }
+
+        function showMathPuzzle() {
+            document.getElementById('challenge-step-2').classList.add('hidden');
+            document.getElementById('challenge-step-3').classList.remove('hidden');
+        }
+
+        function checkMathPuzzle() {
+            const val = document.getElementById('math-ans').value;
+            if(val.trim() === "100") {
+                openVideoActual();
+            } else {
+                const box = document.getElementById('challenge-step-3');
+                box.classList.add('shake');
+                document.getElementById('math-error').style.display = 'block';
+                setTimeout(() => box.classList.remove('shake'), 500);
+            }
+        }
+
+        function openVideoActual() {
+            document.getElementById('challenge-overlay').style.display = 'none';
             document.getElementById('video-overlay').style.display = 'flex';
             document.getElementById("bg-music").pause();
+            
+            const video = document.getElementById('pVideo');
+            video.play();
+
+            // Detect when video ends to show Love Lock
+            video.onended = function() {
+                setTimeout(() => {
+                    document.getElementById('video-overlay').style.display = 'none';
+                    document.getElementById('lock-overlay').style.display = 'flex';
+                    document.getElementById("bg-music").play();
+                }, 1000);
+            };
         }
+
+        // === LOVE LOCK TOGGLE ===
+        let isLocked = false;
+        function toggleLock() {
+            const lock = document.getElementById('lock-icon');
+            const status = document.getElementById('lock-status');
+            const blessing = document.getElementById('final-blessing');
+            
+            if(!isLocked) {
+                lock.innerText = "🔒";
+                status.innerText = "Our love is locked forever! ❤️";
+                blessing.classList.remove('hidden');
+                createHeartRain();
+                isLocked = true;
+                // Simple vibration for mobile
+                if (navigator.vibrate) navigator.vibrate(100);
+            }
+        }
+
     </script>
 </body>
 </html>
