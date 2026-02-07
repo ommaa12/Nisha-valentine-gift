@@ -205,15 +205,46 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="start-overlay" onclick="startExperience()">
-        
-        <h2 class="typing-text">
-            Hey, I made something for you
-           <span style="display: block;">.. Nishu💖</span>
-        </h2>
-        <div class="start-btn">Open It 💌</div>
-        <p style="margin-top: 15px; color: #ad1457; font-weight: bold; font-size: 0.9rem;">(Please turn your volume up 🔊)</p>
-    </div>
+<style>
+  /* Default styling */
+  .typing-text {
+    font-size: 2.5rem; /* Larger font for PC */
+    text-align: center;
+    color: #ff4081; /* Matches the pink in your image */
+    width: 100%;
+    padding: 0 10px; /* Prevents touching the very edge */
+  }
+
+  /* MOBILE SPECIFIC: This fixes the issue on phones */
+  @media only screen and (max-width: 600px) {
+    .typing-text {
+      font-size: 1.5rem !important; /* Forces text to be smaller on mobile */
+      white-space: normal; /* Allows text to wrap naturally */
+      line-height: 1.4; /* Adds space between lines */
+    }
+    
+    /* Optional: Ensure the button doesn't get too wide either */
+    .start-btn {
+      font-size: 1.2rem;
+      padding: 10px 20px;
+    }
+  }
+</style>
+
+<div id="start-overlay" onclick="startExperience()">
+    
+    <h2 class="typing-text">
+        Hey, I made something for you
+        <span style="display: block; margin-top: 10px;">.. Nishu💖</span>
+    </h2>
+
+    <div class="start-btn">Open It 💌</div>
+    
+    <p style="margin-top: 15px; color: #ad1457; font-weight: bold; font-size: 0.9rem;">
+        (Please turn your volume up 🔊)
+    </p>
+    
+</div>
 
     <div id="floating-container" class="floating-container">
         <img src="couple.png" alt="Us" class="main-couple-pic">
